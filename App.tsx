@@ -28,7 +28,6 @@ const App: React.FC = () => {
   const [categoryLimits, setCategoryLimits] = useState<CategoryLimit[]>([]);
   const [sharedGoal, setSharedGoal] = useState<Goal | null>(null);
   const [currency, setCurrency] = useState<string>('USD');
-  const [darkMode, setDarkMode] = useState<boolean>(false);
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -44,9 +43,10 @@ const App: React.FC = () => {
 
     // Load local prefs
     const savedCurrency = localStorage.getItem('gemini_currency');
-    const savedDarkMode = localStorage.getItem('gemini_darkmode');
     if (savedCurrency) setCurrency(savedCurrency);
-    if (savedDarkMode) setDarkMode(savedDarkMode === 'true');
+
+    // Enforce dark mode
+    document.documentElement.classList.add('dark');
   }, []);
 
   // --- Subscriptions ---
@@ -72,15 +72,6 @@ const App: React.FC = () => {
   useEffect(() => {
     localStorage.setItem('gemini_currency', currency);
   }, [currency]);
-
-  useEffect(() => {
-    localStorage.setItem('gemini_darkmode', String(darkMode));
-    if (darkMode) {
-      document.documentElement.classList.add('dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-    }
-  }, [darkMode]);
 
   // --- Recurring Logic ---
 
@@ -270,7 +261,7 @@ const App: React.FC = () => {
   };
 
   return (
-    <div className={darkMode ? "dark h-full w-full" : "h-full w-full"}>
+    <div className="dark h-full w-full">
       <div className="h-full flex flex-col bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 transition-colors duration-300">
         {/* Mobile Header */}
         <header className="bg-white dark:bg-slate-900 px-6 py-4 shadow-sm dark:shadow-slate-900 z-20 flex justify-between items-center sticky top-0 transition-colors">
@@ -285,13 +276,6 @@ const App: React.FC = () => {
               </div>
           </div>
           <div className="flex items-center gap-3">
-             <button 
-                onClick={() => setDarkMode(!darkMode)}
-                className="p-2 rounded-full text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
-                aria-label="Toggle Dark Mode"
-             >
-                {darkMode ? '☀️' : '🌙'}
-             </button>
              <select 
                value={currency}
                onChange={(e) => setCurrency(e.target.value)}
