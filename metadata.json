@@ -1,0 +1,6 @@
+{
+  "name": "Gemini Expense Manager",
+  "description": "A smart, mobile-first expense tracker powered by Gemini AI for automated categorization and spending insights.",
+  "icon": "account_balance_wallet",
+  "requestFramePermissions": []
+}
